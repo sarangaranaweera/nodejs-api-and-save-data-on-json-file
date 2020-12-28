@@ -1,0 +1,7 @@
+=== How to run and configure project ====
+
+01. copy source code and run 'npm install' from code root
+02. for start the webserver run 'node index.js' in your terminal
+02. for the load front-end website, goto http://localhost:3000
+03. for add data, goto http://localhost:3000/admin 
+04. all data save to the offers.json file

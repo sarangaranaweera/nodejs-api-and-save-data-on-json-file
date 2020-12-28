@@ -1,0 +1,18 @@
+[
+  {
+    "id": "0e74cc30-9ed8-40a8-97c7-369cf2dcd7a0",
+    "name": "Shangri-La Hotel Colombo",
+    "price": "150",
+    "description": "Staycation Offer: Deluxe Lake View King (Upgrade to the Executive Suite or the One-Bedroom Apartment - Subject to Availability), Free Breakfast, 50 USD F&B and Spa Credit, Early Check-in (10 am), Late Check-out (10 pm), Free Valet Parking)",
+    "email": "cmb@shangrilla.com",
+    "image_url": "http://localhost:3000/images/fimage_1608929911670.jpg"
+  },
+  {
+    "id": "53c0e01d-483f-48d9-b038-eea811a7d1ba",
+    "name": "Cinnamon Grand Colombo",
+    "price": "120",
+    "description": "A luxurious 5 Star City Hotel located in the center of Colombo and in the heart of tourist and commercial hubs like the World Trade Centre, National Museum and Iconic temples. Cinnamon Grand offers, Rooms and Suites, The Award Winning Angsana Spa, 2 Outdoor Swimming Pools, Fitness Center, 14 Dining Options Including “Lagoon” the best seafood restaurant in the city and free Wi-Fi. 36 KM’s from the airport with Audi Sedan or SUV Airport Pickup/Drop options.",
+    "email": "cmb@cinnamon.lk",
+    "image_url": "http://localhost:3000/images/fimage_1608930390584.jpg"
+  }
+]

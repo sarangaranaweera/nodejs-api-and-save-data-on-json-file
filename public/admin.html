@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+        integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+        crossorigin="anonymous" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
+
+<body>
+    <div class="container">
+
+        <h2 class="">Admin Dashboard</h2>
+
+        <div id="app" v-cloak>
+            <div class="row">
+                <div class="col-md-6 bg-white rounded box-shadow">
+                    <div v-if="validationMsg" class="alert alert-danger" role="alert">
+                        All field are required!
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Deal Name</label>
+                        <input type="text" class="form-control" v-model="name" placeholder="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price($)</label>
+                        <input type="number" class="form-control" v-model="price" placeholder="$">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Description</label>
+                        <textarea class="form-control" v-model="description"></textarea>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Email</label>
+                        <input type="email" class="form-control" v-model="email" placeholder="ex@sample.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Image</label>
+                        <input type="file" ref="file" class="form-control" v-on:change="handleFileUpload()">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success" @Click="submitForm()">Save</button>
+                        <button class="btn btn-default" @Click="clearInputs()">Clear</button>
+                    </div>
+
+                </div>
+                <div class="col-md-6">
+                    <table class="table">
+                        <th>Name</th>
+                        <th>Price($)</th>
+                        <th>Image</th>
+                        <th>Action</th>
+                        <tr v-for="(offer,index) in offers" :key="index">
+                            <td>{{offer.name}}</td>
+                            <td>{{offer.price}}</td>
+                            <td><img v-bind:src="offer.image_url" width="50px" height="50px"></td>
+                            <td style="color:red" title="delete"><i @click="deleteOffer(offer.id)"
+                                    class="fa fa-trash danger"></i></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.21/vue.js"></script>
+
+
+<script>
+    const vm = new Vue({
+        el: "#app",
+        data: {
+            fimage: '',
+            name: '',
+            price: '',
+            email: '',
+            description: '',
+            validationMsg: false,
+            offers: []
+        },
+
+        mounted() {
+            //when page loading this method is running 
+            this.getOfferList();
+
+        },
+
+        methods: {
+            handleFileUpload() {
+                //when select new file this will be trigger
+                this.fimage = this.$refs.file.files[0];
+            },
+            submitForm(e) {
+                this.validationMsg = false;
+               // validate inputs
+                if (this.name == '' || this.price == '' || this.email == '' || this.description) {
+                    this.validationMsg = true;
+                } else {
+
+                     //save data into the offers.json file using node API '/api/offers' 
+                    let formData = new FormData();
+                    formData.append('fimage', this.fimage);
+                    formData.append('name', this.name);
+                    formData.append('price', this.price);
+                    formData.append('email', this.email);
+                    formData.append('description', this.description);
+
+                    axios.post('/api/offers',
+                        formData,
+                        {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        }
+                    ).then(response => {
+                        this.clearInputs()
+                        this.getOfferList();
+                        console.log('SUCCESS!!');
+                    })
+                        .catch(err => {
+                            console.log('FAILURE!!');
+                        });
+                }
+
+
+            },
+            getOfferList() {
+                //get all offers
+                axios.get('/api/offers')
+                    .then(response => {
+                        this.offers = response.data;
+                    }).catch(err => {
+                        console.log(err)
+                    });
+            },
+            deleteOffer(id) {
+                //delete an offer
+                axios.delete('/api/offers/' + id);
+                this.getOfferList();
+                console.log('deleted!');
+            },
+            clearInputs() {
+                //clear form values
+                this.name = ''
+                this.price = ''
+                this.email = ''
+                this.fimage = ''
+                this.description = ''
+            }
+        },
+
+
+    }
+
+    );
+</script>
+
+</html>
